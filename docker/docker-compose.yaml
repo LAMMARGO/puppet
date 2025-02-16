@@ -4,7 +4,7 @@ services:
     container_name: puppetserver
     hostname: puppet
     ports:
-      - "8140:8140"
+      - 8140:8140
     volumes:
       - puppet_data:/etc/puppetlabs
       - puppet_logs:/var/log/puppetlabs
@@ -17,7 +17,7 @@ services:
     container_name: puppet-agent
     depends_on:
       - puppet
-    command: ["agent", "--test", "--server", "puppet"]
+    command: [agent, --test, --server, puppet]
     volumes:
       - puppet_agent_data:/etc/puppetlabs
       - puppet_agent_logs:/var/log/puppetlabs
