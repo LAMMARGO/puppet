@@ -1,0 +1,33 @@
+services:
+  puppet:
+    image: puppet/puppetserver
+    container_name: puppetserver
+    hostname: puppet
+    ports:
+      - "8140:8140"
+    volumes:
+      - puppet_data:/etc/puppetlabs
+      - puppet_logs:/var/log/puppetlabs
+    environment:
+      - PUPPETSERVER_HOSTNAME=puppet
+    restart: unless-stopped
+
+  agent:
+    image: puppet/puppet-agent
+    container_name: puppet-agent
+    depends_on:
+      - puppet
+    command: ["agent", "--test", "--server", "puppet"]
+    volumes:
+      - puppet_agent_data:/etc/puppetlabs
+      - puppet_agent_logs:/var/log/puppetlabs
+    environment:
+      - PUPPET_AGENT_CERTNAME=puppet-agent
+      - PUPPET_AGENT_SERVER=puppet
+    restart: unless-stopped
+
+volumes:
+  puppet_data:
+  puppet_logs:
+  puppet_agent_data:
+  puppet_agent_logs:
